@@ -1,0 +1,27 @@
+{
+  "name": "releasemonitor",
+  "version": "1.0.0",
+  "description": "monitor release performance",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": " webpack serve"
+  },
+  "author": "rozenmoon",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.177",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
