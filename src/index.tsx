@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Home } from './Home';
 
 const AppRoot: any = () => (
   <main>
-    <div>
-      "Hello"
-    </div>
+    <Home />
   </main>
 );
 
