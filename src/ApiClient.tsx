@@ -1,30 +1,16 @@
 import { Octokit } from 'octokit';
 import { GITHUB_API_KEY } from '../constant';
 import { pick } from 'lodash';
+import { RepoData } from '../types';
 
 const octokit = new Octokit({ auth: GITHUB_API_KEY });
-
-const defaultParam: any = {
-    org: 'kouzoh',
-    type: "internal",
-    per_page: 100,
-}
-
-export interface RepoData {
-    id: number;
-    description: string;
-    default_branch: string;
-    full_name: string;
-    git_commits_url: string;
-    topics: string[];
-    pushed_at: Date;
-    updated_at: Date;
-}
 
 export const getGithubRepositoryList = async () => {
     try {
         const response = await octokit.request('GET /orgs/{org}/repos', {
-            ...defaultParam,
+            org: 'mercari',
+            type: "all",
+            per_page: 100,
         });
         const reposDataList: RepoData[] = response.data.map((repoData: any) => pick(repoData, ['id',
             'description',
@@ -34,6 +20,46 @@ export const getGithubRepositoryList = async () => {
             'topics',
             'pushed_at', 'updated_at']));
         return reposDataList;
+    }
+    catch (e) {
+        return e;
+    }
+
+}
+
+type getCommitProps = {
+    repoId: number;
+    repo: string;
+    branch: string;
+}
+
+export const getCommits = async ({ repoId, repo, branch }: getCommitProps) => {
+    try {
+        const response = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+            owner: 'mercari',
+            repo: repo,
+            sha: branch,
+            per_page: 100
+        });
+        var commitDataList = response.data.map((commitData: any) => {
+            const newCommitData = pick(commitData, ['url',
+                'sha',
+                'commit.url',
+                'commit.author.name',
+                'commit.author.email',
+                'commit.author.date',
+                'commit.message',
+                'date',
+                'repoId',
+                'repoName'
+            ]);
+            newCommitData.date = new Date(commitData.commit.author.date);
+            newCommitData.repoId = repoId;
+            newCommitData.repoName = repo;
+            return newCommitData;
+        }
+        );
+        return commitDataList;
     }
     catch (e) {
         return e;

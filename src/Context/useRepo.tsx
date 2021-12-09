@@ -1,17 +1,11 @@
-import React, { useState, useContext, useReducer } from 'react';
-import { getGithubRepositoryList, RepoData } from '../ApiClient';
-
-// export const getRepoList = () => {
-//     const { setRepoList } = useContext(RepoContext);
-//     const { setLoading } = useContext(RepoContext);
-//     setLoading(true);
-//     getGithubRepositoryList().then(repoList => { setRepoList(repoList); setLoading(false); });
-// }
+import React, { useReducer } from 'react';
+import { RepoData } from '../../types';
 
 interface RepoContextStateType {
-    loading: boolean;
+    loading?: boolean;
     repoList?: RepoData[];
     error?: string;
+    checkedRepo?: number[];
 }
 
 interface RepoContextValueType {
@@ -22,6 +16,7 @@ interface RepoContextValueType {
 const dafaultValue: RepoContextValueType = {
     state: {
         loading: false,
+        checkedRepo: []
     },
     dispatch: () => { }
 }
@@ -30,16 +25,28 @@ export const RepoContext = React.createContext(dafaultValue);
 
 type ActionType = { type: 'LOADING' }
     | { type: 'LOADSUCCESS', payload: RepoData[] }
-    | { type: 'LOADFAILURE', payload: string };
+    | { type: 'LOADFAILURE', payload: string }
+    | { type: 'SELECTREPO', payload: number }
+    | { type: 'UNSELECTREPO', payload: number }
+    ;
 
 const reducer = (state: RepoContextStateType, action: ActionType): RepoContextStateType => {
     switch (action.type) {
         case "LOADING":
             return { ...state, loading: true };
         case "LOADSUCCESS":
-            return { loading: false, repoList: action.payload };
+            return { ...state, loading: false, repoList: action.payload };
         case "LOADFAILURE":
-            return { loading: false, error: action.payload };
+            return { ...state, loading: false, error: action.payload };
+        case "SELECTREPO":
+            return { ...state, checkedRepo: state.checkedRepo ? state.checkedRepo.concat([action.payload]) : [action.payload] };
+        case "UNSELECTREPO":
+            const newCheckedRepo = state.checkedRepo ? state.checkedRepo : [];
+            const index = newCheckedRepo.indexOf(action.payload);
+            if (index > -1) {
+                newCheckedRepo.splice(index, 1);
+            };
+            return { ...state, checkedRepo: newCheckedRepo };
         default:
             return state;
     }
