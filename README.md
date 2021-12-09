@@ -6,8 +6,7 @@ We will visualize github commit to certain repo and branch which affects Product
 
 ## Why 
 
-For everyone in the compnay to know a change has happend in the production
-This is help with incident handelling and error logging (by tracking which release might have cause the problem)
+For everyone in the compnay to know a change has happend in the production. This is help with incident handelling and error logging (by tracking which release might have cause the problem)
 
 ## How to run locally
 

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.repoCommitContainer {
+    width: 75%;
+    margin: 0 0 0 5px;
+}
+
+.commitList{
+    height: 700px;
+    overflow:auto;
+}

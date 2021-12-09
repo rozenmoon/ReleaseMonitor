@@ -1,0 +1,1 @@
+export { RepoCommit } from './RepoCommit';
