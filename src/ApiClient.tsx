@@ -1,5 +1,5 @@
 import { Octokit } from 'octokit';
-import { GITHUB_API_KEY } from '../constant';
+import { GITHUB_API_KEY, ORGANIZATION } from '../constant';
 import { pick } from 'lodash';
 import { RepoData } from '../types';
 
@@ -8,7 +8,7 @@ const octokit = new Octokit({ auth: GITHUB_API_KEY });
 export const getGithubRepositoryList = async () => {
     try {
         const response = await octokit.request('GET /orgs/{org}/repos', {
-            org: 'mercari',
+            org: ORGANIZATION ? ORGANIZATION: '',
             type: "all",
             per_page: 100,
         });
@@ -36,7 +36,7 @@ type getCommitProps = {
 export const getCommits = async ({ repoId, repo, branch }: getCommitProps) => {
     try {
         const response = await octokit.request('GET /repos/{owner}/{repo}/commits', {
-            owner: 'mercari',
+            owner: ORGANIZATION ? ORGANIZATION: '',
             repo: repo,
             sha: branch,
             per_page: 100
